@@ -1,16 +1,15 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include <string>
+#include "structures.h"
+using namespace std; 
 
-const int TILE_SIZE = 32;
-const int WINDOW_WIDTH = 800;
-const int WINDOW_HEIGHT = 600;
-const int PLAYER_SPEED = 4;
 
-// Initialize MAP using a function to avoid initialization issues
-std::vector<std::vector<int> > createMap() {
-    std::vector<std::vector<int> > map = {
-        {0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+
+// hardcode map instead of using sprite sheet
+vector<vector<int> > createMap() {
+    vector<vector<int> > map = {
+        {2,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,1,1,0,0,0,0,2,2,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0},
         {0,1,1,0,0,0,0,2,2,2,2,0,0,2,2,2,2,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,2,2,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0},
@@ -29,18 +28,9 @@ std::vector<std::vector<int> > createMap() {
     return map;
 }
 
-const std::vector<std::vector<int> > MAP = createMap();
+const vector<vector<int> > MAP = createMap();
 
-struct Player {
-    float x, y;
-    int frame;
-    bool facingLeft;
-    SDL_Rect currentClip;
-};
 
-struct Camera {
-    int x, y;
-};
 
 // Function to create a colored rectangle (simulating pixel art)
 SDL_Surface* createTileTexture(int r, int g, int b) {
@@ -49,7 +39,7 @@ SDL_Surface* createTileTexture(int r, int g, int b) {
     return surface;
 }
 
-bool isColliding(float x, float y, const std::vector<std::vector<int> >& map) {
+bool isColliding(float x, float y, const vector<vector<int> >& map) {
     int tileX = static_cast<int>(x) / TILE_SIZE;
     int tileY = static_cast<int>(y) / TILE_SIZE;
     
@@ -61,8 +51,8 @@ bool isColliding(float x, float y, const std::vector<std::vector<int> >& map) {
 
 int main(int argc, char* argv[]) {
     SDL_Init(SDL_INIT_VIDEO);
-    
-    SDL_Window* window = SDL_CreateWindow("Zelda-style Game",
+    SDL_Init(SDL_INIT_EVERYTHING);
+    SDL_Window* window = SDL_CreateWindow("os",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
     
@@ -124,6 +114,12 @@ int main(int argc, char* argv[]) {
             newX += PLAYER_SPEED;
             player.facingLeft = false;
         }
+        if ((currentKeyStates[SDL_SCANCODE_D] && currentKeyStates[SDL_SCANCODE_W]) || 
+            (currentKeyStates[SDL_SCANCODE_A] && currentKeyStates[SDL_SCANCODE_W]) ||
+            (currentKeyStates[SDL_SCANCODE_A] && currentKeyStates[SDL_SCANCODE_S]) ||
+            (currentKeyStates[SDL_SCANCODE_S] && currentKeyStates[SDL_SCANCODE_D])){
+
+            }
         
         // Check collision before updating position
         if (!isColliding(newX, player.y, MAP)) player.x = newX;

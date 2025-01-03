@@ -4,10 +4,10 @@ CXXFLAGS = $(shell pkg-config --cflags sdl2)
 LDFLAGS = $(shell pkg-config --libs sdl2)
 
 # Output executable
-TARGET = zelda_game
+TARGET = shell
 
 # Source files
-SRC = main.cpp
+SRC = main.cpp 
 
 # Default target
 all: $(TARGET)
